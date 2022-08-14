@@ -2,6 +2,9 @@
 const catchAsync = require("./../Utils/catchAsync");
 const multer = require("multer");
 const appError = require("./../Utils/Apperror");
+const readline = require("readline");
+const fs = require("fs");
+const stream = require("stream");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -44,5 +47,16 @@ exports.postfile = catchAsync(async (req, res) => {
 
 //TODO all Manipulations on file
 const fileManipulations = (req) => {
+  const filenameModified = req.logData.modifiedName;
+  const fileInput = fs.createReadStream(`Dev-Data/${filenameModified}`);
+  const fileOutStream = new stream();
+  const record1 = readline.Interface(fileInput, fileOutStream);
+
+  record1.on("line", (line) => {
+    console.log(line);
+    console.log();
+  });
+  record1.on("close", () => {});
+
   console.log(req.logData);
 };
