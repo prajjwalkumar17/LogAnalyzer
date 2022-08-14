@@ -2,21 +2,21 @@
 
 const AppError = require("./Utils/Apperror");
 const express = require("express");
-const app = express();
 const GlobalError = require("./Utils/errorController");
 const morgan = require("morgan");
-app.use(morgan("dev"));
 const statsRouter = require("./Routers/statsRouter");
 const fileRouter = require("./Routers/fileRouter");
+
+//
+const app = express();
+app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
-// const bodyParser = require("body-parser");
-// const multer = require("multer");
-// const upload = multer();
-// app.use(upload.array());
+
+//MARK Routes classification
 app.use("/api/v1/stats", statsRouter);
 app.use("/api/v1/file", fileRouter);
 
-//TODO ERROR
+//MARK ERROR on other routes than the defined
 app.use("*", (req, res, next) => {
   next(
     new AppError(
