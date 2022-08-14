@@ -10,6 +10,8 @@
   "author": "prajjwal",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.0",
+    "event-stream": "^4.0.1",
     "express": "^4.18.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",

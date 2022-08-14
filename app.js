@@ -9,9 +9,10 @@ app.use(morgan("dev"));
 const statsRouter = require("./Routers/statsRouter");
 const fileRouter = require("./Routers/fileRouter");
 app.use(express.json({ limit: "10kb" }));
-const multer = require("multer");
-const upload = multer();
-app.use(upload.array());
+// const bodyParser = require("body-parser");
+// const multer = require("multer");
+// const upload = multer();
+// app.use(upload.array());
 app.use("/api/v1/stats", statsRouter);
 app.use("/api/v1/file", fileRouter);
 
