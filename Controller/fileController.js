@@ -54,7 +54,7 @@ const fileManipulations = (req) => {
   const record1 = readline.Interface(fileInput, fileOutStream);
 
   record1.on("line", (line) => {
-    // console.log(line);
+    console.log(line);
     lines.push(line);
   });
   record1.on("close", () => {});

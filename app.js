@@ -1,6 +1,7 @@
 /** @format */
 
 const AppError = require("./Utils/Apperror");
+const cors = require("cors");
 const express = require("express");
 const GlobalError = require("./Utils/errorController");
 const morgan = require("morgan");
@@ -9,6 +10,7 @@ const fileRouter = require("./Routers/fileRouter");
 
 //
 const app = express();
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
 
