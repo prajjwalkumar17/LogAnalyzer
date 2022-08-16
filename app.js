@@ -7,12 +7,27 @@ const GlobalError = require("./Utils/errorController");
 const morgan = require("morgan");
 const statsRouter = require("./Routers/statsRouter");
 const fileRouter = require("./Routers/fileRouter");
+const path = require("path");
 
 //
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
+
+//MARK
+// app.use("/public", express.static(path.join(__dirname, "static")));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.get("/", (req, res) => {
+  res.render("welcome");
+});
+app.get("/filepicker", (req, res) => {
+  res.render("dumplogs");
+});
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard");
+});
 
 //MARK Routes classification
 app.use("/api/v1/stats", statsRouter);

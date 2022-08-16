@@ -1,0 +1,183 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Analyzer</title>
+    <style>
+      /** @format */
+
+      .bodyform {
+        color: black;
+        background-color: rgb(45, 43, 167);
+        height: 100%;
+        width: 100%;
+      }
+      .files input {
+        outline: 2px dashed #92b0b3;
+        outline-offset: -10px;
+        -webkit-transition: outline-offset 0.15s ease-in-out,
+          background-color 0.15s linear;
+        transition: outline-offset 0.15s ease-in-out,
+          background-color 0.15s linear;
+        padding: 120px 0px 85px 35%;
+        text-align: center !important;
+        margin: 0;
+        margin-top: 30%;
+
+        width: 100% !important;
+      }
+      label {
+        margin-left: 50%;
+        position: relative;
+        margin-top: 30%;
+        color: #f1f1f1;
+      }
+
+      .uploadbot {
+        margin-left: 45%;
+        width: 100%;
+        margin-top: 3rem;
+      }
+      .files input:focus {
+        outline: 2px dashed #92b0b3;
+        outline-offset: -10px;
+        -webkit-transition: outline-offset 0.15s ease-in-out,
+          background-color 0.15s linear;
+        transition: outline-offset 0.15s ease-in-out,
+          background-color 0.15s linear;
+        border: 1px solid #92b0b3;
+      }
+      .files {
+        position: relative;
+      }
+      .files:after {
+        pointer-events: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 50px;
+        right: 0;
+        height: 56px;
+        content: "";
+        background-image: url("icdownload.png");
+        display: block;
+        margin: 0 auto;
+        margin-top: 30%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+      }
+      .color input {
+        background-color: #f1f1f1;
+        color: #000;
+      }
+      .files:before {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        pointer-events: none;
+        width: 100%;
+        right: 0;
+        height: 57px;
+        content: " or drag it here. ";
+        display: block;
+        margin: 0 auto;
+        color: #2ea591;
+        font-weight: 600;
+        text-transform: capitalize;
+        text-align: center;
+      }
+
+      @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+      * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: #14273d;
+        font-weight: 700;
+        color: #000;
+        font-size: 22px;
+        font-family: "be vietnam";
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .container-content h3 {
+        margin-top: 35px;
+        color: #4475e2;
+      }
+
+      .container-content hr {
+        width: 130px;
+        margin-left: 0px;
+        margin-top: 30px;
+      }
+
+      .container-content .btn {
+        border: none;
+        outline: none;
+        padding: 15px 45px;
+        margin-top: 30px;
+        background: transparent;
+        border-radius: 50px;
+        font-size: 20px;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .container-content .btn:hover {
+        transform: translateY(5px);
+      }
+
+      .container-content .btn1 {
+        background: #17375b;
+      }
+    </style>
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="container-content">
+        <h3>Logs gone simple...</h3>
+        <h1>Choose/Drop your file</h1>
+        <h3>.txt or .log files accepted</h3>
+        <hr />
+        <br />
+
+        <form
+          className="bodyform"
+          method="post"
+          action="/api/v1/file"
+          enctype="multipart/form-data"
+          id="#"
+        >
+          <div class="form-group files color">
+            <input type="file" name="File" class="form-control" />
+          </div>
+          <button
+            className="uploadbot"
+            style="width: 100%; background-color: #4475e2"
+            ;
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
