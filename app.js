@@ -5,7 +5,6 @@ const cors = require("cors");
 const express = require("express");
 const GlobalError = require("./Utils/errorController");
 const morgan = require("morgan");
-const statsRouter = require("./Routers/statsRouter");
 const fileRouter = require("./Routers/fileRouter");
 const path = require("path");
 
@@ -31,7 +30,6 @@ app.get("/filepicker", (req, res) => {
 // });
 
 //MARK Routes classification
-app.use("/api/v1/stats", statsRouter);
 app.use("/api/v1/log", fileRouter);
 
 //MARK ERROR on other routes than the defined

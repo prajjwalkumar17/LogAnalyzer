@@ -2,13 +2,15 @@
 const catchAsync = require("./../Utils/catchAsync");
 const multer = require("multer");
 const appError = require("./../Utils/Apperror");
+const manipulations = require("./../Utils/normalManimulations");
 const readline = require("readline");
 const fs = require("fs");
 const stream = require("stream");
-const iplocate = require("node-iplocate");
-const createCsvWriter = require("csv-writer").createObjectCsvWriter;
-
-//TODO File upload implementations
+const visualController = require("./visualsControllers");
+const regexController = require("./regexController");
+const reportController = require("./reportsController");
+const presentTime = Date.now();
+//TODO File upload/MULTER implementations
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //MARK supplying the destination to store our log file
@@ -18,7 +20,7 @@ const multerStorage = multer.diskStorage({
     //MARK changing the file name according to extention
     req.logData = file;
     const extension = file.originalname.split(".")[1];
-    const filename = `user-log-${Date.now()}.${extension}`;
+    const filename = `user-log-${presentTime}.${extension}`;
     req.logData.modifiedName = filename;
     cb(null, filename);
   },
@@ -42,7 +44,6 @@ const uploadResources = multer({
 });
 exports.uploads = uploadResources.single("File");
 
-//MARK responses
 exports.postfile = catchAsync(async (req, res) => {
   fileManipulations([], req, res);
 });
@@ -60,125 +61,38 @@ function fileManipulations(arr, req, res) {
   const record1 = readline.Interface(fileInput, fileOutStream);
 
   record1.on("line", (line) => {
-    // console.log(line);
     lines.push(line);
   });
   record1.on("close", () => {
-    regexmanipulation(arr, lines, filenameModified, res);
+    regexmanipulation(arr, lines, res);
   });
 }
 //MARK regex matching
 let GlobalArray = [];
-const regexmanipulation = (resultArray, line, name, res) => {
-  let dateTime = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})/;
-  let date = /(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*)/;
-  let time = /([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)/;
-  let IP = /(\d+.\d+\.\d+\.\d+)/;
-  let status = /(INFO|ERROR|WARN|TRACE|DEBUG|FATAL)/;
-  let requestType = /(?<=!Request-Type\=).*?[^#]*/;
-  let userAgent = /(?<=!User-Agent\=).*?[^#]*/;
-  let apiUsed = /(?<=!API\=).*?[^#]*/;
-  let user = /(?<=!User-Name\=).*?[^#]*/;
-  let userLogin = /(?<=!User-Login\=).*?[^#]*/;
-  let enterpriseName = /(?<=!EnterpriseName\=).*?[^#]*/;
-  let enterpriseId = /(?<=!EnterpriseId\=).*?[^#]*/;
-  let requestBody = /(?<=!Request-Body\=).*?[^#]*/;
-  let responseTime = /(?<=!Response-Time\=).*?[^#]*/;
-  let statusCode = /(?<=!Status-Code\=).*?[^#]*/;
-  let authStatus = /(?<=!Auth-Status\=).*?[^#]*/;
+const regexmanipulation = (resultArray, line, res) => {
+  //MARK regex Matched JSON
+  resultArray = regexController.matchREGEX(resultArray, line);
 
-  let json = {};
-  for (i = 0; i < line.length; i++) {
-    if (!line[i] == "") {
-      if (line[i].match(IP)) json["IP"] = line[i].match(IP)[0];
-      if (line[i].match(dateTime))
-        json["TimeStamp"] = line[i].match(dateTime)[0];
-      if (line[i].match(date)) json["date"] = line[i].match(date)[0];
-      if (line[i].match(time)) json["time"] = line[i].match(time)[0];
-      if (line[i].match(status)) json["status"] = line[i].match(status)[0];
-      if (line[i].match(requestType))
-        json["requestType"] = line[i].match(requestType)[0];
-      if (line[i].match(userAgent))
-        json["userAgent"] = line[i].match(userAgent)[0].split(" ")[0];
-      if (line[i].match(apiUsed)) json["apiUsed"] = line[i].match(apiUsed)[0];
-      if (line[i].match(user)) json["user"] = line[i].match(user)[0];
-      if (line[i].match(userLogin))
-        json["userLogin"] = line[i].match(userLogin)[0];
-      if (line[i].match(enterpriseName))
-        json["enterpriseName"] = line[i].match(enterpriseName)[0];
-      if (line[i].match(enterpriseId))
-        json["enterpriseId"] = line[i].match(enterpriseId)[0];
-      if (line[i].match(requestBody))
-        json["requestBody"] = line[i].match(requestBody)[0];
-      if (line[i].match(responseTime))
-        json["responseTime"] = line[i].match(responseTime)[0];
-      if (line[i].match(statusCode))
-        json["statusCode"] = line[i].match(statusCode)[0];
-      if (line[i].match(authStatus))
-        json["authStatus"] = line[i].match(authStatus)[0];
-    } else {
-      resultArray.push(json);
-      json = {};
-    }
-  }
   //MARK removing null or undefined entries
-  Object.keys(resultArray).forEach((i) => {
-    Object.keys(resultArray[i]).forEach(
-      (k) =>
-        (resultArray[i][k] &&
-          typeof resultArray[i][k] === "object" &&
-          removeEmptyOrNull(resultArray[i][k])) ||
-        (!resultArray[i][k] &&
-          resultArray[i][k] !== undefined &&
-          delete resultArray[i][k])
-    );
-  });
+  resultArray = manipulations.removeduplicates(resultArray);
 
   //MARK data for our bargraph
-  let bargraphdata = {};
-  Object.keys(resultArray).forEach((i) => {
-    const date = resultArray[i].date;
-    if (bargraphdata.hasOwnProperty(date)) bargraphdata[date]++;
-    else bargraphdata[date] = 1;
-  });
+  let bargraphdata = visualController.visualizeBar(resultArray);
 
-  //MARK JSON Output
-  let jsonOutputStream = fs
-    .createWriteStream(`Dev-Data/JSONoutput/result.json`)
-    .on("error", function (err) {
-      console.log(err.stack);
-    });
-  jsonOutputStream.write(JSON.stringify(resultArray), () => {});
-  jsonOutputStream.close();
-
-  //MARK csv output
-  const keys = Object.keys(resultArray[0]);
-  const csvWriter = createCsvWriter({
-    path: `Dev-Data/CSVoutput/result.csv`,
-    header: keys.map((i) => ({ id: i, title: i })),
-  });
-  async function csvWrite() {
-    try {
-      await csvWriter.writeRecords(resultArray);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  csvWrite();
+  //MARK Report Outputs
+  reportController.exportReportJSON(resultArray);
+  reportController.exportReportCSV(resultArray);
 
   GlobalArray = resultArray;
-  // console.log(bargraphdata);
   return res.status(200).render("dashboard", {
     obj: resultArray,
     barx: Object.keys(bargraphdata),
     bary: Object.values(bargraphdata),
+    logid: presentTime,
   });
 };
 
-// iplocate("17.253.0.0").then((result) => {
-//   console.log(result);
-// });
-
 exports.visualize = (req, res) => {
-  res.render("visualize", { body: GlobalArray });
+  mapData = visualController.visualizeMap(GlobalArray);
+  res.render("visualize", { body: mapData });
 };
