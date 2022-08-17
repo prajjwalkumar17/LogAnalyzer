@@ -5,6 +5,7 @@ const appError = require("./../Utils/Apperror");
 const readline = require("readline");
 const fs = require("fs");
 const stream = require("stream");
+const iplocate = require("node-iplocate");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 //TODO File upload implementations
@@ -67,6 +68,7 @@ function fileManipulations(arr, req, res) {
   });
 }
 //MARK regex matching
+let GlobalArray = [];
 const regexmanipulation = (resultArray, line, name, res) => {
   let dateTime = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})/;
   let date = /(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*)/;
@@ -164,6 +166,7 @@ const regexmanipulation = (resultArray, line, name, res) => {
   }
   csvWrite();
 
+  GlobalArray = resultArray;
   // console.log(bargraphdata);
   return res.status(200).render("dashboard", {
     obj: resultArray,
@@ -171,6 +174,11 @@ const regexmanipulation = (resultArray, line, name, res) => {
     bary: Object.values(bargraphdata),
   });
 };
+
+// iplocate("17.253.0.0").then((result) => {
+//   console.log(result);
+// });
+
 exports.visualize = (req, res) => {
-  res.render("visualize");
+  res.render("visualize", { body: GlobalArray });
 };

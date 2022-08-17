@@ -218,6 +218,7 @@
     />
   </head>
   <body>
+    <h3><%= body[1].IP %></h3>
     <div class="container">
       <div class="navigation">
         <ul>
@@ -433,7 +434,7 @@
       ];
 
       new Chart("barChart", {
-        type: "bar",
+        type: "polarArea",
         data: {
           labels: xValues,
           datasets: [
