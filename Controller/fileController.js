@@ -80,8 +80,8 @@ const regexmanipulation = (resultArray, line, res) => {
   let bargraphdata = visualController.visualizeBar(resultArray, "date");
 
   //MARK Report Outputs
-  // reportController.exportReportJSON(resultArray, presentTime);
-  // reportController.exportReportCSV(resultArray, presentTime);
+  reportController.exportReportJSON(resultArray, presentTime);
+  reportController.exportReportCSV(resultArray, presentTime);
 
   GlobalArray = resultArray;
   return res.status(200).render("dashboard", {
@@ -93,21 +93,23 @@ const regexmanipulation = (resultArray, line, res) => {
 };
 
 exports.visualize = (req, res) => {
-  mapData = visualController.visualizeMap(GlobalArray);
+  // mapData = visualController.mapData(GlobalArray, "IP");
   pieData = visualController.visualizePieBrowers(GlobalArray, "userAgent");
   doughnutData = visualController.visualizeDoughnutRequestTypes(
     GlobalArray,
     "requestType"
   );
+  bar2Data = visualController.visualizeBarAPIUsed(GlobalArray, "apiUsed");
   webChartData = visualController.visualizeWebResponseTimes(
     GlobalArray,
     "responseTime"
   );
   res.render("visualize", {
-    body: mapData,
     logid: presentTime,
     pieX: Object.keys(pieData),
     pieY: Object.values(pieData),
+    bar2X: Object.keys(bar2Data),
+    bar2Y: Object.values(bar2Data),
     doughnutX: Object.keys(doughnutData),
     doughnutY: Object.values(doughnutData),
     webChartX: Object.keys(webChartData),

@@ -1,12 +1,8 @@
 /** @format */
 const iplocate = require("node-iplocate");
-// iplocate("17.253.0.0").then((result) => {
-//   console.log(result);
-// });
 exports.visualizeBar = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
 };
-
 exports.visualizePieBrowers = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
 };
@@ -18,9 +14,8 @@ exports.visualizeDoughnutRequestTypes = (dataSet, askedData) => {
 exports.visualizeWebResponseTimes = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
 };
-
-exports.visualizeMap = (array) => {
-  return array;
+exports.visualizeBarAPIUsed = (dataSet, askedData) => {
+  return graphDataExtractor(dataSet, askedData);
 };
 
 const graphDataExtractor = (dataSet, askedValue) => {

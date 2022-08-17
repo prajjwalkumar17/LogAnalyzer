@@ -346,36 +346,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
     <script>
-      var xyValues = [
-        { x: 50, y: 7 },
-        { x: 60, y: 8 },
-        { x: 70, y: 8 },
-        { x: 80, y: 9 },
-        { x: 90, y: 9 },
-        { x: 100, y: 9 },
-        { x: 110, y: 10 },
-        { x: 120, y: 11 },
-        { x: 130, y: 14 },
-        { x: 140, y: 14 },
-        { x: 150, y: 15 },
-      ];
-
+      var datax = "<%-bar2X%>";
+      var datay = "<%-bar2Y%>";
+      var xValues = datax.split(",");
+      var yValues = datay.split(",");
       new Chart("lineChart", {
-        type: "scatter",
+        type: "bar",
         data: {
+          labels: xValues,
           datasets: [
             {
-              pointRadius: 4,
-              pointBackgroundColor: "rgb(0,0,255)",
-              data: xyValues,
+              data: yValues,
+              backgroundColor: "rgb(107,142,35)",
+              borderColor: "rgb(0,0,0)",
             },
           ],
         },
+
         options: {
+          maintainAspectRatio: false,
+          responsive: true,
           legend: { display: false },
-          scales: {
-            xAxes: [{ ticks: { min: 40, max: 160 } }],
-            yAxes: [{ ticks: { min: 6, max: 16 } }],
+          title: {
+            display: true,
+            position: "top",
+            text: "Requests per day",
           },
         },
       });
@@ -453,7 +448,7 @@
           legend: { display: false },
           title: {
             display: true,
-            text: "Response Time of Sever",
+            text: "Response Time of Sever in seconds",
           },
         },
       });
@@ -473,7 +468,7 @@
 
       function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable([
-          ["Country", "Popularity"],
+          ["Country", "No.of Requests"],
           ["Germany", 200],
           ["United States", 300],
           ["India", 500],
