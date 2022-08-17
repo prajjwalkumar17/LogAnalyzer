@@ -66,11 +66,12 @@ function fileManipulations(arr, req, res) {
     regexmanipulation(arr, lines, filenameModified, res);
   });
 }
+//MARK regex matching
 const regexmanipulation = (resultArray, line, name, res) => {
   let dateTime = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})/;
-  let date = /(\\d{4}-[01]\\d-[0-3]\\d)/;
+  let date = /(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*)/;
   let time = /([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)/;
-  let IPaddr = /(\d+.\d+\.\d+\.\d+)/;
+  let IP = /(\d+.\d+\.\d+\.\d+)/;
   let status = /(INFO|ERROR|WARN|TRACE|DEBUG|FATAL)/;
   let requestType = /(?<=!Request-Type\=).*?[^#]*/;
   let userAgent = /(?<=!User-Agent\=).*?[^#]*/;
@@ -87,7 +88,7 @@ const regexmanipulation = (resultArray, line, name, res) => {
   let json = {};
   for (i = 0; i < line.length; i++) {
     if (!line[i] == "") {
-      if (line[i].match(IPaddr)) json["IP"] = line[i].match(IPaddr)[0];
+      if (line[i].match(IP)) json["IP"] = line[i].match(IP)[0];
       if (line[i].match(dateTime))
         json["TimeStamp"] = line[i].match(dateTime)[0];
       if (line[i].match(date)) json["date"] = line[i].match(date)[0];
@@ -96,7 +97,7 @@ const regexmanipulation = (resultArray, line, name, res) => {
       if (line[i].match(requestType))
         json["requestType"] = line[i].match(requestType)[0];
       if (line[i].match(userAgent))
-        json["userAgent"] = line[i].match(userAgent)[0];
+        json["userAgent"] = line[i].match(userAgent)[0].split(" ")[0];
       if (line[i].match(apiUsed)) json["apiUsed"] = line[i].match(apiUsed)[0];
       if (line[i].match(user)) json["user"] = line[i].match(user)[0];
       if (line[i].match(userLogin))
@@ -130,6 +131,15 @@ const regexmanipulation = (resultArray, line, name, res) => {
           delete resultArray[i][k])
     );
   });
+
+  //MARK data for our bargraph
+  let bargraphdata = {};
+  Object.keys(resultArray).forEach((i) => {
+    const date = resultArray[i].date;
+    if (bargraphdata.hasOwnProperty(date)) bargraphdata[date]++;
+    else bargraphdata[date] = 1;
+  });
+
   //MARK JSON Output
   let jsonOutputStream = fs
     .createWriteStream(`Dev-Data/JSONoutput/result.json`)
@@ -154,7 +164,12 @@ const regexmanipulation = (resultArray, line, name, res) => {
   }
   csvWrite();
 
-  return res.status(200).render("dashboard", { obj: resultArray });
+  // console.log(bargraphdata);
+  return res.status(200).render("dashboard", {
+    obj: resultArray,
+    barx: Object.keys(bargraphdata),
+    bary: Object.values(bargraphdata),
+  });
 };
 exports.visualize = (req, res) => {
   res.render("visualize");

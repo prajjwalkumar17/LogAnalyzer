@@ -189,6 +189,7 @@
       }
 
       table {
+        overflow-y: auto;
         font-family: arial, sans-serif;
         border-collapse: collapse;
         width: 100%;
@@ -198,15 +199,36 @@
       th {
         border: 1px solid #dddddd;
         text-align: left;
-        padding: 8px;
+        padding: 10px;
       }
 
-      tr:nth-child(even) {
+      /* tr:nth-child(even) {
         background-color: #dddddd;
-      }
+      } */
 
+      .red {
+        background-color: #f1345d9a;
+      } 
+       .green {
+        background-color: #6dccacb9;
+      }
       td.eventClass {
         text-align: center;
+      }
+      td span.key {
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: small;
+      }
+
+      td span.ip {
+        background-color: rgb(179, 173, 173);
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: small;
+      }
+      td span.value {
+        font-size: small;
       }
     </style>
 
@@ -251,7 +273,7 @@
           <li>
             <a href="/JSONoutput/result.json" download>
               <span class="icon"
-                ><i class="fa fa-cog" aria-hidden="true"></i
+                ><i class="fa fa-code" aria-hidden="true"></i
               ></span>
               <span class="title">Download Json Report</span>
             </a>
@@ -259,7 +281,7 @@
           <li>
             <a href="/CSVoutput/result.csv">
               <span class="icon"
-                ><i class="fa fa-cog" aria-hidden="true"></i
+                ><i class="fa fa-file-excel-o" aria-hidden="true"></i
               ></span>
               <span class="title">Download CSV Report</span>
             </a>
@@ -270,6 +292,7 @@
       <div class="main">
         <div class="topbar">
           <div class="toggle" onclick="toggleMenu();"></div>
+          <div class="log-file-name">File Name</div>
           <div class="search">
             <label>
               <input type="text" placeholder="Search here" />
@@ -278,12 +301,15 @@
           </div>
         </div>
 
-        <div class="cardBox">
+        <div style="position: relative;
+        margin: auto;
+         height:15%;
+          width:80%" class="cardBox">
           <canvas id="myChart"></canvas>
         </div>
 
         <div class="cardBox">
-          <div class="card">
+          <div class="card" style="margin-right: 3rem;margin-left: 3rem;">
             <table class="log-table">
               <tr>
                 <th>#</th>
@@ -291,30 +317,25 @@
                 <th>Event</th>
               </tr>
               <% if(obj.length>0) {%> <% if(obj.forEach((data,i) =>{ %>
-
               <tr>
-                <td><%= i+1 %></td>
-                <td style="text-align: left"><%= data.TimeStamp %></td>
-                <td class="eventClass">
-                  <p>
-                    IP-address=<%= data.IP %> ,status=<%= data.status
-                    %>,requestType=<%= data.requestType %>,
-                  </p>
-                  <p>
-                    userAgent=<%= data.userAgent %>,apiUsed=<%= data.apiUsed
-                    %>,user=<%= data.user %>,
-                  </p>
-                  <p>
-                    userLogin=<%= data.userLogin %>,enterpriseName=<%=
-                    data.enterpriseName %>,enterpriseId=<%= data.enterpriseId
-                    %>,requestBody=<%= data.requestBody %>
-                  </p>
-                  <p>responseTime=<%= data.responseTime %></p>
-                  <p>statusCode=<%= data.statusCode %></p>
-                  <p>authStatus=<%= data.authStatus %></p>
+                <td >
+                  <%= i+1 %></td>
+                <td style="color:rgb(0, 0, 0);padding: 2rem;" class=<%= data.status == 'ERROR' ? 'red' : 'green' %>>
+                  <div><span class="ip"><%= data.IP %></span></div>
+                  <div style="width: 100px;
+                              white-space:nowrap;
+                              overflow:hidden;
+                              text-overflow:ellipsis;">
+                              <%= data.date %></div>
+                </td>
+                <td class="eventClass logpost">
+                  <% for(const[key,value]of Object.entries(data)){ %>
+                  <span class="key"><%= key%>=</span>
+                  <span class="value"><%= value%></span>
+                  <span>,</span>
+                  <% } %>
                 </td>
               </tr>
-
               <% })) %> <% } %>
             </table>
           </div>
@@ -334,24 +355,15 @@
     </script>
 
     <!-- Char.js -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
     <script>
-      var xValues = [
-        "2022-08-01 08:00",
-        "2022-08-01 09:00",
-        "2022-08-01 10:00",
-        "2022-08-01 11:00",
-        "2022-08-01 12:00",
-        "2022-08-01 13:00",
-        "2022-08-01 14:00",
-        "2022-08-01 15:00",
-        "2022-08-01 16:00",
-        "2022-08-01 17:00",
-      ];
-      var yValues = [
-        2000, 4000, 2036, 3000, 3521, 2563, 1500, 1600, 2699, 2500,
-      ];
+      let datax = "<%-barx%>";
+      let datay = "<%-bary%>";
+      // console.log(datay);
+      var xValues = datax.split(",");
+      var yValues = datay.split(",");
 
       new Chart("myChart", {
         type: "bar",
@@ -360,13 +372,19 @@
           datasets: [
             {
               data: yValues,
+                       backgroundColor:'rgb(107,142,35)',
+                       borderColor:'rgb(0,0,0)',
+
             },
+         
           ],
         },
+      
         options: {
           legend: { display: false },
           title: {
             display: true,
+            position:'bottom',
             text: "Requests per day",
           },
         },
