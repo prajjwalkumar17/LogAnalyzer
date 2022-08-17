@@ -15,7 +15,7 @@
       }
 
       body {
-        overflow-x: hidden;
+        overflow-x: scroll;
       }
 
       .container {
@@ -202,10 +202,6 @@
         padding: 10px;
       }
 
-      /* tr:nth-child(even) {
-        background-color: #dddddd;
-      } */
-
       .red {
         background-color: #f1345d9a;
       } 
@@ -271,7 +267,7 @@
             Reports
           </h4>
           <li>
-            <a href="/JSONoutput/result.json" download>
+            <a href="/JSONoutput/user-report-<%= logid %>.json" download>
               <span class="icon"
                 ><i class="fa fa-code" aria-hidden="true"></i
               ></span>
@@ -279,7 +275,7 @@
             </a>
           </li>
           <li>
-            <a href="/CSVoutput/result.csv">
+            <a href="/CSVoutput/user-report-<%= logid %>.csv">
               <span class="icon"
                 ><i class="fa fa-file-excel-o" aria-hidden="true"></i
               ></span>
@@ -302,10 +298,8 @@
         </div>
 
         <div style="position: relative;
-        margin: auto;
-         height:15%;
-          width:80%" class="cardBox">
-          <canvas id="myChart"></canvas>
+        margin: auto;" class="cardBox">
+          <canvas id="myChart" style="height: 400px"></canvas>
         </div>
 
         <div class="cardBox">
@@ -361,7 +355,6 @@
     <script>
       let datax = "<%-barx%>";
       let datay = "<%-bary%>";
-      // console.log(datay);
       var xValues = datax.split(",");
       var yValues = datay.split(",");
 
@@ -381,10 +374,13 @@
         },
       
         options: {
+          
+           maintainAspectRatio: false,
+               responsive: true,
           legend: { display: false },
           title: {
             display: true,
-            position:'bottom',
+            position:'top',
             text: "Requests per day",
           },
         },

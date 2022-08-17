@@ -3,19 +3,19 @@ const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const fs = require("fs");
 
 //MARK Report exports
-exports.exportReportJSON = (obj) => {
+exports.exportReportJSON = (obj, presentTime) => {
   let jsonOutputStream = fs
-    .createWriteStream(`Dev-Data/JSONoutput/result.json`)
+    .createWriteStream(`Dev-Data/JSONoutput/user-report-${presentTime}.json`)
     .on("error", function (err) {
       console.log(err.stack);
     });
   jsonOutputStream.write(JSON.stringify(obj), () => {});
   jsonOutputStream.close();
 };
-exports.exportReportCSV = (obj) => {
+exports.exportReportCSV = (obj, presentTime) => {
   const keys = Object.keys(obj[0]);
   const csvWriter = createCsvWriter({
-    path: `Dev-Data/CSVoutput/result.csv`,
+    path: `Dev-Data/CSVoutput/user-report-${presentTime}.csv`,
     header: keys.map((i) => ({ id: i, title: i })),
   });
   async function csvWrite() {

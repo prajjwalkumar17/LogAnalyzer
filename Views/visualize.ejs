@@ -15,7 +15,7 @@
       }
 
       body {
-        overflow-x: hidden;
+        overflow-x: scroll;
       }
 
       .container {
@@ -208,6 +208,26 @@
       td.eventClass {
         text-align: center;
       }
+      @media screen and (max-width: 1000px) {
+        .cardBoxVisualize {
+          position: relative;
+          width: 100%;
+          padding: 20px;
+          display: grid;
+          grid-template-columns: repeat(1, 2fr);
+          grid-gap: 20px;
+        }
+      }
+      @media screen and (min-width: 1000px) {
+        .cardBoxVisualize {
+          position: relative;
+          width: 100%;
+          padding: 20px;
+          display: grid;
+          grid-template-columns: repeat(2, 2fr);
+          grid-gap: 20px;
+        }
+      }
     </style>
 
     <link
@@ -218,7 +238,6 @@
     />
   </head>
   <body>
-    <h3><%= body[1].IP %></h3>
     <div class="container">
       <div class="navigation">
         <ul>
@@ -250,7 +269,7 @@
             Reports
           </h4>
           <li>
-            <a href="/JSONoutput/result.json" download>
+            <a href="/JSONoutput/user-report-<%= logid %>.json" download>
               <span class="icon"
                 ><i class="fa fa-code" aria-hidden="true"></i
               ></span>
@@ -258,7 +277,7 @@
             </a>
           </li>
           <li>
-            <a href="/CSVoutput/result.csv">
+            <a href="/CSVoutput/user-report-<%= logid %>.csv">
               <span class="icon"
                 ><i class="fa fa-file-excel-o" aria-hidden="true"></i
               ></span>
@@ -280,38 +299,29 @@
         </div>
 
         <div class="cardBox">
-          <div id="regions_div"></div>
+          <div id="regions_div" style="margin: auto; width: 80%"></div>
         </div>
 
-        <div class="cardBoxVisualize">
+        <div class="cardBoxVisualize" style="margin: auto; width: 60%">
           <!-- mutliple charts -->
-          <div class="card">
+          <div class="card" style="max-width: 700px">
             <!-- line chart -->
             <canvas
               id="lineChart"
               style="width: 100%; max-width: 600px"
             ></canvas>
           </div>
-          <div class="card">
+          <div class="card" style="max-width: 400px">
             <!-- pie chart -->
-            <canvas
-              id="pieChart"
-              style="width: 100%; max-width: 600px"
-            ></canvas>
+            <canvas id="pieChart" style="width: 50%; max-width: 400px"></canvas>
           </div>
-          <div class="card">
+          <div class="card" style="max-width: 500px">
             <!-- doughnut -->
-            <canvas
-              id="doughnut"
-              style="width: 100%; max-width: 600px"
-            ></canvas>
+            <canvas id="doughnut" style="width: 50%; max-width: 500px"></canvas>
           </div>
-          <div class="card">
+          <div class="card" style="max-width: 400px">
             <!-- barchart -->
-            <canvas
-              id="barChart"
-              style="width: 100%; max-width: 600px"
-            ></canvas>
+            <canvas id="barChart" style="width: 50%; max-width: 400px"></canvas>
           </div>
         </div>
       </div>
@@ -366,10 +376,11 @@
         },
       });
     </script>
-
     <script>
-      var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-      var yValues = [55, 49, 44, 24, 15];
+      var datax = "<%=pieX%>";
+      var datay = "<%=pieY%>";
+      var xValues = datax.split(",");
+      var yValues = datay.split(",");
       var barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
 
       new Chart("pieChart", {
@@ -386,14 +397,16 @@
         options: {
           title: {
             display: true,
-            text: "World Wide Wine Production 2018",
+            text: "Browser with versions",
           },
         },
       });
     </script>
     <script>
-      var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-      var yValues = [55, 49, 44, 24, 15];
+      var datax = "<%=doughnutX%>";
+      var datay = "<%=doughnutY%>";
+      var xValues = datax.split(",");
+      var yValues = datay.split(",");
       var barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
 
       new Chart("doughnut", {
@@ -410,28 +423,16 @@
         options: {
           title: {
             display: true,
-            text: "World Wide Wine Production 2018",
+            text: "Request Types",
           },
         },
       });
     </script>
-
     <script>
-      var xValues = [
-        "2022-08-01 08:00",
-        "2022-08-01 09:00",
-        "2022-08-01 10:00",
-        "2022-08-01 11:00",
-        "2022-08-01 12:00",
-        "2022-08-01 13:00",
-        "2022-08-01 14:00",
-        "2022-08-01 15:00",
-        "2022-08-01 16:00",
-        "2022-08-01 17:00",
-      ];
-      var yValues = [
-        2000, 4000, 2036, 3000, 3521, 2563, 1500, 1600, 2699, 2500,
-      ];
+      var datax = "<%=webChartX%>";
+      var datay = "<%=webChartY%>";
+      var xValues = datax.split(",");
+      var yValues = datay.split(",");
 
       new Chart("barChart", {
         type: "polarArea",
@@ -447,7 +448,7 @@
           legend: { display: false },
           title: {
             display: true,
-            text: "@timestamp per 1 hours",
+            text: "Response Time of Sever",
           },
         },
       });
