@@ -77,7 +77,7 @@ const regexmanipulation = (resultArray, line, res) => {
   resultArray = manipulations.removeduplicates(resultArray);
 
   //MARK data for our bargraph
-  let bargraphdata = visualController.visualizeBar(resultArray);
+  let bargraphdata = visualController.visualizeBar(resultArray, "date");
 
   //MARK Report Outputs
   // reportController.exportReportJSON(resultArray, presentTime);
@@ -94,9 +94,15 @@ const regexmanipulation = (resultArray, line, res) => {
 
 exports.visualize = (req, res) => {
   mapData = visualController.visualizeMap(GlobalArray);
-  pieData = visualController.visualizePieBrowers(GlobalArray);
-  doughnutData = visualController.visualizeDoughnutRequestTypes(GlobalArray);
-  webChartData = visualController.visualizeWebResponseTimes(GlobalArray);
+  pieData = visualController.visualizePieBrowers(GlobalArray, "userAgent");
+  doughnutData = visualController.visualizeDoughnutRequestTypes(
+    GlobalArray,
+    "requestType"
+  );
+  webChartData = visualController.visualizeWebResponseTimes(
+    GlobalArray,
+    "responseTime"
+  );
   res.render("visualize", {
     body: mapData,
     logid: presentTime,

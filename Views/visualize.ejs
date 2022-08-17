@@ -220,12 +220,7 @@
       }
       @media screen and (min-width: 1000px) {
         .cardBoxVisualize {
-          position: relative;
-          width: 100%;
-          padding: 20px;
-          display: grid;
           grid-template-columns: repeat(2, 2fr);
-          grid-gap: 20px;
         }
       }
     </style>
@@ -313,15 +308,24 @@
           </div>
           <div class="card" style="max-width: 400px">
             <!-- pie chart -->
-            <canvas id="pieChart" style="width: 50%; max-width: 400px"></canvas>
+            <canvas
+              id="pieChart"
+              style="width: 100%; max-width: 400px"
+            ></canvas>
           </div>
           <div class="card" style="max-width: 500px">
             <!-- doughnut -->
-            <canvas id="doughnut" style="width: 50%; max-width: 500px"></canvas>
+            <canvas
+              id="doughnut"
+              style="width: 100%; max-width: 500px"
+            ></canvas>
           </div>
           <div class="card" style="max-width: 400px">
             <!-- barchart -->
-            <canvas id="barChart" style="width: 50%; max-width: 400px"></canvas>
+            <canvas
+              id="barChart"
+              style="width: 100%; max-width: 400px"
+            ></canvas>
           </div>
         </div>
       </div>
@@ -441,6 +445,7 @@
           datasets: [
             {
               data: yValues,
+              backgroundColor: "rgb(118,243,100)",
             },
           ],
         },
