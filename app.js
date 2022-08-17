@@ -18,6 +18,7 @@ app.use(express.json({ limit: "10kb" }));
 //MARK
 // app.use("/public", express.static(path.join(__dirname, "static")));
 app.use(express.static("public"));
+app.use(express.static("Dev-Data"));
 app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   res.render("welcome");
@@ -25,13 +26,13 @@ app.get("/", (req, res) => {
 app.get("/filepicker", (req, res) => {
   res.render("dumplogs");
 });
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard");
-});
+// app.get("/dashboard", (req, res) => {
+//   res.render("dashboard");
+// });
 
 //MARK Routes classification
 app.use("/api/v1/stats", statsRouter);
-app.use("/api/v1/file", fileRouter);
+app.use("/api/v1/log", fileRouter);
 
 //MARK ERROR on other routes than the defined
 app.use("*", (req, res, next) => {

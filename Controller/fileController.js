@@ -5,8 +5,9 @@ const appError = require("./../Utils/Apperror");
 const readline = require("readline");
 const fs = require("fs");
 const stream = require("stream");
-const e = require("cors");
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
+//TODO File upload implementations
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //MARK supplying the destination to store our log file
@@ -34,20 +35,18 @@ const multerFilter = (req, file, cb) => {
     cb(new appError("Invalid file type select only .txt or .log", 404));
   }
 };
-
 const uploadResources = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
-
 exports.uploads = uploadResources.single("File");
 
+//MARK responses
 exports.postfile = catchAsync(async (req, res) => {
   fileManipulations([], req, res);
 });
 
 //TODO all Manipulations on file
-
 function fileManipulations(arr, req, res) {
   let lines = [];
   const filenameModified = req.logData.modifiedName;
@@ -119,6 +118,44 @@ const regexmanipulation = (resultArray, line, name, res) => {
       json = {};
     }
   }
-  console.log(resultArray);
+  //MARK removing null or undefined entries
+  Object.keys(resultArray).forEach((i) => {
+    Object.keys(resultArray[i]).forEach(
+      (k) =>
+        (resultArray[i][k] &&
+          typeof resultArray[i][k] === "object" &&
+          removeEmptyOrNull(resultArray[i][k])) ||
+        (!resultArray[i][k] &&
+          resultArray[i][k] !== undefined &&
+          delete resultArray[i][k])
+    );
+  });
+  //MARK JSON Output
+  let jsonOutputStream = fs
+    .createWriteStream(`Dev-Data/JSONoutput/result.json`)
+    .on("error", function (err) {
+      console.log(err.stack);
+    });
+  jsonOutputStream.write(JSON.stringify(resultArray), () => {});
+  jsonOutputStream.close();
+
+  //MARK csv output
+  const keys = Object.keys(resultArray[0]);
+  const csvWriter = createCsvWriter({
+    path: `Dev-Data/CSVoutput/result.csv`,
+    header: keys.map((i) => ({ id: i, title: i })),
+  });
+  async function csvWrite() {
+    try {
+      await csvWriter.writeRecords(resultArray);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  csvWrite();
+
   return res.status(200).render("dashboard", { obj: resultArray });
+};
+exports.visualize = (req, res) => {
+  res.render("visualize");
 };
