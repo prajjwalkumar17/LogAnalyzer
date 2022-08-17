@@ -23,8 +23,6 @@ exports.matchREGEX = (resultArray, line) => {
   for (i = 0; i < line.length; i++) {
     if (!line[i] == "") {
       if (line[i].match(IP)) resultSet["IP"] = line[i].match(IP)[0];
-      if (line[i].match(dateTime))
-        resultSet["TimeStamp"] = line[i].match(dateTime)[0];
       if (line[i].match(date)) resultSet["date"] = line[i].match(date)[0];
       if (line[i].match(time)) resultSet["time"] = line[i].match(time)[0];
       if (line[i].match(status)) resultSet["status"] = line[i].match(status)[0];
