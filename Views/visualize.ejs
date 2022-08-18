@@ -467,6 +467,12 @@
       google.charts.setOnLoadCallback(drawRegionsMap);
 
       function drawRegionsMap() {
+        // const sanitizedData = data.replaceAll("&#34;", "");
+        // console.log(sanitizedData);
+        // var data = google.visualization.arrayToDataTable([
+        //   ["Country", "No.of Requests"],
+        //   ...data,
+        // ]);
         var data = google.visualization.arrayToDataTable([
           ["Country", "No.of Requests"],
           ["Germany", 200],

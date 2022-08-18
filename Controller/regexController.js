@@ -3,6 +3,7 @@
 //MARK regex
 const dateTime = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})/;
 const date = /(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*)/;
+const multiSpace = /\s\s+/g;
 const time = /([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)/;
 const IP = /(\d+.\d+\.\d+\.\d+)/;
 const status = /(INFO|ERROR|WARN|TRACE|DEBUG|FATAL)/;
@@ -19,7 +20,9 @@ const statusCode = /(?<=!Status-Code\=).*?[^#]*/;
 const authStatus = /(?<=!Auth-Status\=).*?[^#]*/;
 let resultSet = {};
 
-exports.matchREGEX = (resultArray, line) => {
+exports.matchREGEX = (resultArray, lines) => {
+  const line = removeExtraSpace(lines);
+  console.log(line);
   for (i = 0; i < line.length; i++) {
     if (!line[i] == "") {
       if (line[i].match(IP)) resultSet["IP"] = line[i].match(IP)[0];
@@ -54,3 +57,13 @@ exports.matchREGEX = (resultArray, line) => {
   }
   return resultArray;
 };
+//MARK removes any multiple spaces into one
+function removeExtraSpace(line) {
+  for (let i = 1; i < line.length - 1; i++) {
+    if (line[i] == "" && line[i + 1] == "") {
+      line.splice(i, 1);
+    }
+    if (line[i] == "" && line[i - 1] == "") line.splice(i - 1, 1);
+  }
+  return line;
+}
