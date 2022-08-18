@@ -55,10 +55,10 @@ function fileManipulations(arr, req, res) {
   const fileInput = fs.createReadStream(
     `Dev-Data/UploadLogs/${filenameModified}`
   );
-  const fileOutStream = new stream();
-  fileOutStream.readable = true;
-  fileOutStream.writable = true;
-  const record1 = readline.Interface(fileInput, fileOutStream);
+  const record1 = readline.createInterface({
+    input: fileInput,
+    crlfDelay: Infinity,
+  });
 
   record1.on("line", (line) => {
     lines.push(line);

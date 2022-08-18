@@ -3,7 +3,6 @@
 //MARK regex
 const dateTime = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})/;
 const date = /(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*)/;
-const multiSpace = /\s\s+/g;
 const time = /([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)/;
 const IP = /(\d+.\d+\.\d+\.\d+)/;
 const status = /(INFO|ERROR|WARN|TRACE|DEBUG|FATAL)/;
