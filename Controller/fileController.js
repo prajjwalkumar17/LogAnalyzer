@@ -83,9 +83,12 @@ const regexmanipulation = (resultArray, line, res) => {
   reportController.exportReportJSON(resultArray, presentTime);
   reportController.exportReportCSV(resultArray, presentTime);
 
+  const noofLines = line.length;
+
   GlobalArray = resultArray;
   return res.status(200).render("dashboard", {
     obj: resultArray,
+    noofLines,
     barx: Object.keys(bargraphdata),
     bary: Object.values(bargraphdata),
     logid: presentTime,
@@ -93,7 +96,7 @@ const regexmanipulation = (resultArray, line, res) => {
 };
 
 exports.visualize = async (req, res) => {
-  // mapData = await visualController.visualizeMap(GlobalArray, "IP");
+  mapData = await visualController.visualizeMap(GlobalArray, "IP");
   // arraydata = [["country", "No.Of Requests per day"], ...mapData];
   // console.log(arraydata);
   pieData = visualController.visualizePieBrowers(GlobalArray, "userAgent");
@@ -108,7 +111,7 @@ exports.visualize = async (req, res) => {
   );
   res.render("visualize", {
     logid: presentTime,
-    // mapData,
+    mapData,
     pieX: Object.keys(pieData),
     pieY: Object.values(pieData),
     bar2X: Object.keys(bar2Data),

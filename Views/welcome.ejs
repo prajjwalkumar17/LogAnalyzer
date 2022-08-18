@@ -1,6 +1,6 @@
 <!-- @format -->
 <!DOCTYPE html>
-<html lang="en">
+<html style="min-height: 100%" lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log Analyzer</title>
@@ -15,15 +15,20 @@
         background: #14273d;
         font-weight: 700;
         color: #fff;
+        min-height: 100%;
         font-size: 22px;
         font-family: "be vietnam";
-        overflow: hidden;
       }
 
       .container {
         display: flex;
+        min-height: 100%;
         justify-content: center;
-        margin-top: 30px;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
       }
 
       .container-content h3 {
@@ -67,7 +72,16 @@
   </head>
   <body>
     <div class="container">
-      <div class="container-content">
+      <div
+        style="
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+        "
+        class="container-content"
+      >
         <h1>WELCOME</h1>
         <h3>To Log Analyzer</h3>
         <hr />

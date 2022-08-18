@@ -248,7 +248,7 @@
               </a>
             </li>
             <li>
-              <a href="log/visualize">
+              <a onclick="alertWindow();" href="log/visualize">
                 <span class="icon"
                   ><i class="fa fa-bar-chart" aria-hidden="true"></i
                 ></span>
@@ -330,7 +330,12 @@
           </div>
         </div>
       </div>
-
+     <script>
+       function alertWindow() {
+          let noofRecords="<%-noofLines%>";
+          alert("Kudos!!! Your Server-Logs are rocking with\n"+noofRecords +" lines of Logs ☠ \nIt won't take long to Have a quick glance 👉👉👉👉");
+        }
+      </script>
       <script>
         function toggleMenu() {
           let toggle = document.querySelector(".toggle");

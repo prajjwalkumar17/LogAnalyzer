@@ -286,10 +286,16 @@
         <div class="topbar">
           <div class="toggle" onclick="toggleMenu();"></div>
         </div>
+
+        <div style="margin-top: 2rem" class="cardBox">
+          <h2 style="margin-bottom: 2rem; text-align: center">
+            No.Of Requests from different Countries
+          </h2>
+          <div id="regions_div" style="margin: auto; width: 80%"></div>
+        </div>
         <h2 style="text-align: center; margin-top: 3rem; margin-bottom: 2rem">
           Quick Glance
         </h2>
-
         <div class="cardBoxVisualize" style="margin: auto; width: 60%">
           <!-- mutliple charts -->
           <div class="card" style="max-width: 700px">
@@ -320,13 +326,6 @@
               style="width: 100%; max-width: 400px"
             ></canvas>
           </div>
-        </div>
-
-        <div style="margin-top: 10rem" class="cardBox">
-          <h2 style="margin-bottom: 2rem; text-align: center">
-            Future-Scope(Ip address request from locations)
-          </h2>
-          <div id="regions_div" style="margin: auto; width: 80%"></div>
         </div>
       </div>
     </div>
@@ -440,7 +439,7 @@
           datasets: [
             {
               data: yValues,
-              backgroundColor: "rgb(118,243,100)",
+              backgroundColor: "rgba(96, 231, 69, 0.404)",
             },
           ],
         },
@@ -467,25 +466,35 @@
       google.charts.setOnLoadCallback(drawRegionsMap);
 
       function drawRegionsMap() {
-        // const sanitizedData = data.replaceAll("&#34;", "");
-        // console.log(sanitizedData);
-        // var data = google.visualization.arrayToDataTable([
-        //   ["Country", "No.of Requests"],
-        //   ...data,
-        // ]);
-        var data = google.visualization.arrayToDataTable([
+        // let data = "[[&#34;India&#34;,1],[&#34;United States&#34;,1]]";
+        var data = "<%= JSON.stringify(mapData) %>";
+        const sanitizedData = data.replaceAll("&#34;", "");
+
+        let ar = sanitizedData
+          .replace(/"/g, "")
+          .split("")
+          .filter((x) => x != "[")
+          .filter((x) => x != "]")
+          .join("")
+          .split(",");
+        let arr = [];
+
+        for (let i = 0; i < ar.length; i += 2) {
+          let in_ar = [];
+          in_ar[0] = ar[i];
+          in_ar[1] = parseInt(ar[i + 1]);
+          arr.push(in_ar);
+        }
+        var newData = [["Country", "No.of Requests"], ...arr];
+        var dataSet = google.visualization.arrayToDataTable([
           ["Country", "No.of Requests"],
-          ["Germany", 200],
-          ["United States", 300],
-          ["India", 500],
-          ["Canada", 400],
-          ["RU", 730],
+          ...arr,
         ]);
         var options = {};
         var chart = new google.visualization.GeoChart(
           document.getElementById("regions_div")
         );
-        chart.draw(data, options);
+        chart.draw(dataSet, options);
       }
     </script>
 

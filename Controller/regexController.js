@@ -22,7 +22,6 @@ let resultSet = {};
 
 exports.matchREGEX = (resultArray, lines) => {
   const line = removeExtraSpace(lines);
-  console.log(line);
   for (i = 0; i < line.length; i++) {
     if (!line[i] == "") {
       if (line[i].match(IP)) resultSet["IP"] = line[i].match(IP)[0];
