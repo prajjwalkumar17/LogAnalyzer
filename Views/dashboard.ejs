@@ -1,400 +1,400 @@
-<!-- @format -->
+  <!-- @format -->
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Log Analyzer</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
-      }
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Log Analyzer</title>
+      <style>
+        @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Poppins", sans-serif;
+        }
 
-      body {
-        overflow-x: scroll;
-      }
+        body {
+          overflow-x: scroll;
+        }
 
-      .container {
-        position: relative;
-        width: 100%;
-      }
-      .navigation {
-        position: fixed;
-        width: 300px;
-        height: 100%;
-        background: #003147;
-        transition: 0.5s;
-        overflow-x: hidden;
-      }
+        .container {
+          position: relative;
+          width: 100%;
+        }
+        .navigation {
+          position: fixed;
+          width: 300px;
+          height: 100%;
+          background: #003147;
+          transition: 0.5s;
+          overflow-x: hidden;
+        }
 
-      .navigation.active {
-        width: 60px;
-      }
+        .navigation.active {
+          width: 60px;
+        }
 
-      .navigation ul {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-      }
+        .navigation ul {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+        }
 
-      .navigation ul li {
-        position: relative;
-        width: 100%;
-        list-style: none;
-      }
+        .navigation ul li {
+          position: relative;
+          width: 100%;
+          list-style: none;
+        }
 
-      .navigation ul li:hover {
-        background: #03a9f4;
-      }
+        .navigation ul li:hover {
+          background: #03a9f4;
+        }
 
-      .navigation ul li a {
-        position: relative;
-        display: block;
-        width: 100%;
-        display: flex;
-        text-decoration: none;
-        color: #fff;
-      }
+        .navigation ul li a {
+          position: relative;
+          display: block;
+          width: 100%;
+          display: flex;
+          text-decoration: none;
+          color: #fff;
+        }
 
-      .navigation ul li a .icon {
-        position: relative;
-        display: block;
-        min-width: 60px;
-        height: 60px;
-        line-height: 60px;
-        text-align: center;
-      }
+        .navigation ul li a .icon {
+          position: relative;
+          display: block;
+          min-width: 60px;
+          height: 60px;
+          line-height: 60px;
+          text-align: center;
+        }
 
-      .navigation ul li a .icon .fa {
-        color: #fff;
-        font-size: 24px;
-      }
+        .navigation ul li a .icon .fa {
+          color: #fff;
+          font-size: 24px;
+        }
 
-      .navigation ul li a .title {
-        position: relative;
-        display: block;
-        padding: 0 10px;
-        height: 60px;
-        line-height: 60px;
-        white-space: nowrap;
-      }
+        .navigation ul li a .title {
+          position: relative;
+          display: block;
+          padding: 0 10px;
+          height: 60px;
+          line-height: 60px;
+          white-space: nowrap;
+        }
 
-      .main {
-        position: absolute;
-        width: calc(100% - 300px);
-        left: 300px;
-        min-height: 100vh;
-        background: #f5f5f5;
-        transition: 0.5s;
-      }
+        .main {
+          position: absolute;
+          width: calc(100% - 300px);
+          left: 300px;
+          min-height: 100vh;
+          background: #f5f5f5;
+          transition: 0.5s;
+        }
 
-      .main.active {
-        width: calc(100% - 60px);
-        left: 60px;
-      }
+        .main.active {
+          width: calc(100% - 60px);
+          left: 60px;
+        }
 
-      .main .topbar {
-        width: 100%;
-        background: #fff;
-        height: 60px;
-        padding: 0 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+        .main .topbar {
+          width: 100%;
+          background: #fff;
+          height: 60px;
+          padding: 0 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
 
-      .toggle {
-        position: relative;
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-      }
+        .toggle {
+          position: relative;
+          width: 60px;
+          height: 60px;
+          cursor: pointer;
+        }
 
-      .toggle::before {
-        content: "\f0c9";
-        font-family: fontAwesome;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        line-height: 60px;
-        font-size: 24px;
-        text-align: center;
-        color: #111;
-      }
+        .toggle::before {
+          content: "\f0c9";
+          font-family: fontAwesome;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          line-height: 60px;
+          font-size: 24px;
+          text-align: center;
+          color: #111;
+        }
 
-      .serach {
-        position: relative;
-        width: 400px;
-        margin: 0 10px;
-      }
+        .serach {
+          position: relative;
+          width: 400px;
+          margin: 0 10px;
+        }
 
-      .serach label {
-        position: relative;
-        width: 100%;
-      }
+        .serach label {
+          position: relative;
+          width: 100%;
+        }
 
-      .serach label input {
-        width: 100%;
-        height: 40px;
-        border-radius: 40px;
-        padding: 5px 20px;
-        padding-left: 35px;
-        outline: none;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-      }
+        .serach label input {
+          width: 100%;
+          height: 40px;
+          border-radius: 40px;
+          padding: 5px 20px;
+          padding-left: 35px;
+          outline: none;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+        }
 
-      .serach label .fa {
-        position: absolute;
-        left: 15px;
-        top: 4px;
-      }
+        .serach label .fa {
+          position: absolute;
+          left: 15px;
+          top: 4px;
+        }
 
-      .cardBox {
-        position: relative;
-        width: 100%;
-        padding: 20px;
-        display: flexbox;
-      }
+        .cardBox {
+          position: relative;
+          width: 100%;
+          padding: 20px;
+          display: flexbox;
+        }
 
-      .cardBox .card {
-        position: relative;
-        background: #fff;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        cursor: pointer;
-      }
+        .cardBox .card {
+          position: relative;
+          background: #fff;
+          padding: 20px;
+          display: flex;
+          justify-content: space-between;
+          cursor: pointer;
+        }
 
-      .cardBoxVisualize {
-        position: relative;
-        width: 100%;
-        padding: 20px;
-        display: grid;
-        grid-template-columns: repeat(2, 2fr);
-        grid-gap: 20px;
-      }
+        .cardBoxVisualize {
+          position: relative;
+          width: 100%;
+          padding: 20px;
+          display: grid;
+          grid-template-columns: repeat(2, 2fr);
+          grid-gap: 20px;
+        }
 
-      .cardBoxVisualize .card {
-        position: relative;
-        background: #fff;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        cursor: pointer;
-      }
+        .cardBoxVisualize .card {
+          position: relative;
+          background: #fff;
+          padding: 20px;
+          display: flex;
+          justify-content: space-between;
+          cursor: pointer;
+        }
 
-      table {
-        overflow-y: auto;
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-      }
+        table {
+          overflow-y: auto;
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
 
-      td,
-      th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 10px;
-      }
+        td,
+        th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 10px;
+        }
 
-      .red {
-        background-color: #f1345d9a;
-      } 
-       .green {
-        background-color: #6dccacb9;
-      }
-      td.eventClass {
-        text-align: center;
-      }
-      td span.key {
-        font-weight: bold;
-        border-radius: 5px;
-        font-size: small;
-      }
+        .red {
+          background-color: #f1345d9a;
+        } 
+        .green {
+          background-color: #6dccacb9;
+        }
+        td.eventClass {
+          text-align: center;
+        }
+        td span.key {
+          font-weight: bold;
+          border-radius: 5px;
+          font-size: small;
+        }
 
-      td span.ip {
-        background-color: rgb(179, 173, 173);
-        font-weight: bold;
-        border-radius: 5px;
-        font-size: small;
-      }
-      td span.value {
-        font-size: small;
-      }
-    </style>
+        td span.ip {
+          background-color: rgb(179, 173, 173);
+          font-weight: bold;
+          border-radius: 5px;
+          font-size: small;
+        }
+        td span.value {
+          font-size: small;
+        }
+      </style>
 
-    <link
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <div class="navigation">
-        <ul>
-          <li style="margin-top: 3rem">
-            <a href="#">
-              <span class="icon"
-                ><i class="fa fa-globe" aria-hidden="true"></i
-              ></span>
-              <span class="title">Log-Summary</span>
-            </a>
-          </li>
-          <li>
-            <a href="log/visualize">
-              <span class="icon"
-                ><i class="fa fa-bar-chart" aria-hidden="true"></i
-              ></span>
-              <span class="title">Visualize</span>
-            </a>
-          </li>
-          <h4
-            c
-            style="
-              color: #fff;
-              margin-top: 3rem;
-              margin-left: 0.3rem;
-              margin-bottom: 1rem;
-            "
-          >
-            Reports
-          </h4>
-          <li>
-            <a href="/JSONoutput/user-report-<%= logid %>.json" download>
-              <span class="icon"
-                ><i class="fa fa-code" aria-hidden="true"></i
-              ></span>
-              <span class="title">Download Json Report</span>
-            </a>
-          </li>
-          <li>
-            <a href="/CSVoutput/user-report-<%= logid %>.csv">
-              <span class="icon"
-                ><i class="fa fa-file-excel-o" aria-hidden="true"></i
-              ></span>
-              <span class="title">Download CSV Report</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="main">
-        <div class="topbar">
-          <div class="toggle" onclick="toggleMenu();"></div>
-          <div class="log-file-name">Log-Id : <%= logid %> </div>
+      <link
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous"
+      />
+    </head>
+    <body>
+      <div class="container">
+        <div class="navigation">
+          <ul>
+            <li style="margin-top: 3rem">
+              <a href="#">
+                <span class="icon"
+                  ><i class="fa fa-globe" aria-hidden="true"></i
+                ></span>
+                <span class="title">Log-Summary</span>
+              </a>
+            </li>
+            <li>
+              <a href="log/visualize">
+                <span class="icon"
+                  ><i class="fa fa-bar-chart" aria-hidden="true"></i
+                ></span>
+                <span class="title">Visualize</span>
+              </a>
+            </li>
+            <h4
+              c
+              style="
+                color: #fff;
+                margin-top: 3rem;
+                margin-left: 0.3rem;
+                margin-bottom: 1rem;
+              "
+            >
+              Reports
+            </h4>
+            <li>
+              <a href="/JSONoutput/user-report-<%= logid %>.json" download>
+                <span class="icon"
+                  ><i class="fa fa-code" aria-hidden="true"></i
+                ></span>
+                <span class="title">Download Json Report</span>
+              </a>
+            </li>
+            <li>
+              <a href="/CSVoutput/user-report-<%= logid %>.csv">
+                <span class="icon"
+                  ><i class="fa fa-file-excel-o" aria-hidden="true"></i
+                ></span>
+                <span class="title">Download CSV Report</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <div style="position: relative;
-        margin: auto;" class="cardBox">
-          <canvas id="myChart" style="height: 400px"></canvas>
-        </div>
+        <div class="main">
+          <div class="topbar">
+            <div class="toggle" onclick="toggleMenu();"></div>
+            <div class="log-file-name">Log-Id : <%= logid %> </div>
+          </div>
 
-        <div class="cardBox">
-          <div class="card" style="margin-right: 3rem;margin-left: 3rem;">
-            <table class="log-table">
-              <tr>
-                <th>#</th>
-                <th>IP/Date</th>
-                <th>Log Summary</th>
-              </tr>
-              <% if(obj.length>0) {%> <% if(obj.forEach((data,i) =>{ %>
-              <tr>
-                <td >
-                  <%= i+1 %></td>
-                <td style="color:rgb(0, 0, 0);padding: 2rem;" class=<%= data.status == 'ERROR' ? 'red' : 'green' %>>
-                  <div><span class="ip"><%= data.IP %></span></div>
-                  <div style="width: 100px;
-                              white-space:nowrap;
-                              overflow:hidden;
-                              text-overflow:ellipsis;">
-                              <%= data.date %></div>
-                </td>
-                <td class="eventClass logpost">
-                  <% for(const[key,value]of Object.entries(data)){ %>
-                  <span class="key"><%= key%>=</span>
-                  <span class="value"><%= value%></span>
-                  <span>,</span>
-                  <% } %>
-                </td>
-              </tr>
-              <% })) %> <% } %>
-            </table>
+          <div style="position: relative;
+          margin: auto;" class="cardBox">
+            <canvas id="myChart" style="height: 400px"></canvas>
+          </div>
+
+          <div class="cardBox">
+            <div class="card" style="margin-right: 3rem;margin-left: 3rem;">
+              <table class="log-table">
+                <tr>
+                  <th>#</th>
+                  <th>IP/Date</th>
+                  <th>Log Summary</th>
+                </tr>
+                <% if(obj.length>0) {%> <% if(obj.forEach((data,i) =>{ %>
+                <tr>
+                  <td >
+                    <%= i+1 %></td>
+                  <td style="color:rgb(0, 0, 0);padding: 2rem;" class=<%= data.status == 'ERROR' ? 'red' : 'green' %>>
+                    <div><span class="ip"><%= data.IP %></span></div>
+                    <div style="width: 100px;
+                                white-space:nowrap;
+                                overflow:hidden;
+                                text-overflow:ellipsis;">
+                                <%= data.date %></div>
+                  </td>
+                  <td class="eventClass logpost">
+                    <% for(const[key,value]of Object.entries(data)){ %>
+                    <span class="key"><%= key%>=</span>
+                    <span class="value"><%= value%></span>
+                    <span>,</span>
+                    <% } %>
+                  </td>
+                </tr>
+                <% })) %> <% } %>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <script>
-      function toggleMenu() {
-        let toggle = document.querySelector(".toggle");
-        let navigation = document.querySelector(".navigation");
-        let main = document.querySelector(".main");
-        toggle.classList.toggle("active");
-        navigation.classList.toggle("active");
-        main.classList.toggle("active");
-      }
-    </script>
+      <script>
+        function toggleMenu() {
+          let toggle = document.querySelector(".toggle");
+          let navigation = document.querySelector(".navigation");
+          let main = document.querySelector(".main");
+          toggle.classList.toggle("active");
+          navigation.classList.toggle("active");
+          main.classList.toggle("active");
+        }
+      </script>
 
-    <!-- Char.js -->
+      <!-- Char.js -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
-    <script>
-      let datax = "<%-barx%>";
-      let datay = "<%-bary%>";
-      var xValues = datax.split(",");
-      var yValues = datay.split(",");
+      <script>
+        let datax = "<%-barx%>";
+        let datay = "<%-bary%>";
+        var xValues = datax.split(",");
+        var yValues = datay.split(",");
 
-      new Chart("myChart", {
-        type: "bar",
-        data: {
-          labels: xValues,
-          datasets: [
-            {
-              data: yValues,
-              backgroundColor:'rgb(107,142,35)',
-              borderColor:'rgb(0,0,0)',
+        new Chart("myChart", {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                data: yValues,
+                backgroundColor:'rgb(107,142,35)',
+                borderColor:'rgb(0,0,0)',
 
-            },
-         
-          ],
-        },
-      
-        options: {
+              },
           
-           maintainAspectRatio: false,
-               responsive: true,
-          legend: { display: false },
-          title: {
-            display: true,
-            position:'top',
-            text: "Requests per day",
+            ],
           },
-        },
-      });
-    </script>
-    <!-- bootstrap -->
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+        
+          options: {
+            
+            maintainAspectRatio: false,
+                responsive: true,
+            legend: { display: false },
+            title: {
+              display: true,
+              position:'top',
+              text: "Requests per day",
+            },
+          },
+        });
+      </script>
+      <!-- bootstrap -->
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"
+      ></script>
+    </body>
+  </html>

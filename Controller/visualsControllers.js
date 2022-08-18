@@ -1,5 +1,5 @@
 /** @format */
-const iplocate = require("node-iplocate");
+
 exports.visualizeBar = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
 };
