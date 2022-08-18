@@ -241,7 +241,7 @@
               <span class="icon"
                 ><i class="fa fa-globe" aria-hidden="true"></i
               ></span>
-              <span class="title">Discover</span>
+              <span class="title">Log-Summary</span>
             </a>
           </li>
           <li>
@@ -286,10 +286,9 @@
         <div class="topbar">
           <div class="toggle" onclick="toggleMenu();"></div>
         </div>
-
-        <div class="cardBox">
-          <div id="regions_div" style="margin: auto; width: 80%"></div>
-        </div>
+        <h2 style="text-align: center; margin-top: 3rem; margin-bottom: 2rem">
+          Quick Glance
+        </h2>
 
         <div class="cardBoxVisualize" style="margin: auto; width: 60%">
           <!-- mutliple charts -->
@@ -321,6 +320,13 @@
               style="width: 100%; max-width: 400px"
             ></canvas>
           </div>
+        </div>
+
+        <div style="margin-top: 10rem" class="cardBox">
+          <h2 style="margin-bottom: 2rem; text-align: center">
+            Future-Scope(Ip address request from locations)
+          </h2>
+          <div id="regions_div" style="margin: auto; width: 80%"></div>
         </div>
       </div>
     </div>
@@ -364,7 +370,7 @@
           title: {
             display: true,
             position: "top",
-            text: "Requests per day",
+            text: "API hits",
           },
         },
       });
