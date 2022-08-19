@@ -4,6 +4,9 @@ const fs = require("fs");
 
 //MARK Report exports
 exports.exportReportJSON = (obj, presentTime) => {
+  fs.mkdir("Dev-Data/JSONoutput/", { recursive: true }, (err) => {
+    if (err) throw err;
+  });
   let jsonOutputStream = fs
     .createWriteStream(`Dev-Data/JSONoutput/user-report-${presentTime}.json`)
     .on("error", function (err) {
@@ -13,6 +16,9 @@ exports.exportReportJSON = (obj, presentTime) => {
   jsonOutputStream.close();
 };
 exports.exportReportCSV = (obj, presentTime) => {
+  fs.mkdir("Dev-Data/CSVoutput/", { recursive: true }, (err) => {
+    if (err) throw err;
+  });
   const keys = Object.keys(obj[0]);
   const csvWriter = createCsvWriter({
     path: `Dev-Data/CSVoutput/user-report-${presentTime}.csv`,

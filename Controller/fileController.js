@@ -11,6 +11,9 @@ const regexController = require("./regexController");
 const reportController = require("./reportsController");
 const presentTime = Date.now();
 //TODO File upload/MULTER implementations
+fs.mkdir("Dev-Data/UploadLogs/", { recursive: true }, (err) => {
+  if (err) throw err;
+});
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //MARK supplying the destination to store our log file
