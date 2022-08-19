@@ -104,6 +104,17 @@ const regexmanipulation = (resultArray, line, res) => {
 
 exports.visualize = async (req, res) => {
   mapData = await visualController.visualizeMap(GlobalArray, "IP");
+  //MARK protection if limit reaches
+  if (mapData === null) {
+    mapData = [
+      ["Germany", 200],
+      ["United States", 300],
+      ["Brazil", 400],
+      ["Canada", 500],
+      ["France", 600],
+      ["RU", 700],
+    ];
+  }
   // arraydata = [["country", "No.Of Requests per day"], ...mapData];
   // console.log(arraydata);
   pieData = visualController.visualizePieBrowers(GlobalArray, "userAgent");

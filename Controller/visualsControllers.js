@@ -21,7 +21,6 @@ const visualizeMap = async (dataset, askedData) => {
   }
   return resData;
 };
-
 const visualizeBar = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
 };
