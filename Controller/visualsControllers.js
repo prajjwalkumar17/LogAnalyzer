@@ -4,36 +4,23 @@ const locFinder = require("node-iplocate");
 async function getloc(ip) {
   let resultObjs = {};
   const data = await locFinder(ip);
-  // console.log(data);
   resultObjs = data;
   return resultObjs;
 }
 
 const visualizeMap = async (dataset, askedData) => {
   let ipFreq = graphDataExtractor(dataset, askedData);
-  // console.log(ipFreq);
-
   let resData = [];
   for (const [key, value] of Object.entries(ipFreq)) {
     let resObj = [];
     const details = await getloc(key);
     const country = details.country;
-    // resObj.country = details.country;
     resObj.push(country);
     resObj.push(value);
-    // resObj[country] = value;
     resData.push(resObj);
   }
   return resData;
-  // console.log(resData);
-  // let data = {};
-  // const details = await getloc("8.8.8.8");
-  // console.log(details);
-  // data.country = details.country;
-  // console.log(data);
 };
-
-// visualizeMap();
 
 const visualizeBar = (dataSet, askedData) => {
   return graphDataExtractor(dataSet, askedData);
