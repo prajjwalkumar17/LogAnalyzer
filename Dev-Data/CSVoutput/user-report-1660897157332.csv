@@ -1,0 +1,4 @@
+date,time,status,IP,userAgent,requestType,apiUsed,user,enterpriseId,responseTime,statusCode
+2018-09-18,04:49:38,ERROR,115.240.90.163,Mozilla/5.0,POST,/v1/admin/developers,testUser,2,346,200
+2018-09-18,04:49:39,ERROR,149.142.201.252,InternetExplorer/5.0,GET,/v2/developers,testUser,2,1240,200
+2018-09-18,04:49:41,ERROR,80.92.32.0,Mozilla/5.0,GET,/v2/developers,testUser,2,1117,200
